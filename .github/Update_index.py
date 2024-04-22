@@ -57,7 +57,7 @@ class tool():
                 await cls.set_file_hash(hash_filePath, file_name, new_fileHash)
                 print(f"成功更新 '{file_name}.json' 的<hash>")
                 await cls.set_file_value(index_filePath, file_name, res.text)
-                print(f"创建{file_name}+'.json完成'")
+                print(f"创建 '{file_name}.json' 完成")
             else:
                 old_hashdata = await cls.get_file_hash(hash_filePath)
                 if new_fileHash != old_hashdata[file_name]:

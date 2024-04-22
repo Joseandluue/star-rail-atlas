@@ -15,6 +15,7 @@ for file_name in file:
         with open(old_filePath, 'w', encoding='utf-8') as f:
             new_fileData = json.loads(res.text)
             json.dump(new_fileData, f, ensure_ascii=False, indent=4)
+        print(f'已创建{file_name}')
     else:
         with open(old_filePath, 'rb') as f:
             old_fileData = f.read()

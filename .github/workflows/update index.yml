@@ -22,7 +22,7 @@ jobs:
       - name: Run python script
         run: |
           cd .github
-          python -m pip install requests
+          python -m pip install requests asyncio
           python Update_index.py
           
       - name: Commit changes

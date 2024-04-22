@@ -1,23 +1,5 @@
 {
     "role": {
-        "1204": {
-            "path": "/role/1204.png",
-            "hash": "53332885def6a4b3513c47778e20713d",
-            "ext": "png",
-            "width": 1920,
-            "height": 2241,
-            "size": 718647,
-            "update": "2024-04-17 12:16:32"
-        },
-        "1109": {
-            "path": "/role/1109.png",
-            "hash": "5762709b0af16b83ba73f6d2df917313",
-            "ext": "png",
-            "width": 1920,
-            "height": 2590,
-            "size": 700604,
-            "update": "2024-04-17 12:16:32"
-        },
         "1203": {
             "path": "/role/1203.png",
             "hash": "be8232faf547050b2ec88b082d95a9e8",

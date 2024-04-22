@@ -2,28 +2,72 @@ import hashlib
 import requests
 import json
 from pathlib import Path
+import asyncio
 
 
-root_path = Path(__file__).parent.parent
-file = ['files.json','othername.json','path.json']
+class tool():
+    root_path = Path(__file__).parent.parent
 
-for file_name in file:
-    res = requests.get(f'https://raw.githubusercontent.com/Nwflower/star-rail-atlas/master/{file_name}')
-    new_fileHash = hashlib.md5(res.content).hexdigest()
-    old_filePath = root_path / file_name
-    if not old_filePath.exists():
-        with open(old_filePath, 'w', encoding='utf-8') as f:
-            new_fileData = json.loads(res.text)
-            json.dump(new_fileData, f, ensure_ascii=False, indent=4)
-        print(f'已创建{file_name}')
-    else:
-        with open(old_filePath, 'rb') as f:
-            old_fileData = f.read()
-        old_fileHash = hashlib.md5(old_fileData).hexdigest()
-        if new_fileHash != old_fileHash:
-            with open(old_filePath, 'w', encoding='utf-8') as f:
-                new_fileData = json.loads(res.text)
-                json.dump(new_fileData, f, ensure_ascii=False, indent=4)
-            print(f'已更新{file_name}')
+    @classmethod
+    async def set_file_hash(cls, filePath:str, fileName:str, hashValue:int):
+        if not filePath.exists():
+            await cls.get_file_hash(filePath)
         else:
-            print(f'{file_name}已是最新版本')
+            with open(filePath, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                data.update({fileName:hashValue})
+                with open(filePath, 'w', encoding='utf-8') as f_new:
+                    json.dump(data, f_new, indent=4)
+
+    @classmethod
+    async def get_file_hash(cls, filePath):
+        hashVer = {
+            'files': '',
+            'othername': '',
+            'path':''
+        }
+        if not filePath.exists():
+            with open(filePath, 'w', encoding='utf-8') as f:
+                json.dump(hashVer, f, ensure_ascii=False, indent=4)
+            return hashVer
+        else:
+            with open(filePath, 'r', encoding='utf-8') as f:
+                date = json.load(f)
+            return date
+
+    @classmethod
+    async def set_file_value(cls, paths, fileName, contents):
+        if fileName == 'files' or 'path':
+            data = contents['guide for role']
+        elif fileName == 'othername':
+            data = contents['role']
+        with open(paths, 'w', encoding='utf-8') as f:
+            fileData = json.loads(data)
+            json.dump(fileData, f, ensure_ascii=False, indent=4)
+
+    @classmethod
+    async def main(cls):
+        file = ['files','othername','path']
+        for file_name in file:
+            res = requests.get(f'https://raw.githubusercontent.com/Nwflower/star-rail-atlas/master/{file_name}.json')
+            new_fileHash = hashlib.md5(res.content).hexdigest()
+            index_filePath = cls.root_path / f"{file_name}.json"
+            hash_filePath = cls.root_path / 'file_hashVer.json'
+            if not index_filePath.exists():
+                await cls.set_file_hash(hash_filePath, file_name, new_fileHash)
+                print(f"成功更新 '{file_name}.json' 的<hash>")
+                await cls.set_file_value(index_filePath, file_name, res.text)
+                print(f"创建{file_name}+'.json完成'")
+            else:
+                old_hashdata = await cls.get_file_hash(hash_filePath)
+                if new_fileHash != old_hashdata[file_name]:
+                    print(f"正在更新 '{file_name}.json'")
+                    await cls.set_file_hash(hash_filePath, file_name, new_fileHash)
+                    print(f"成功更新 '{file_name}.json' 的<hash>")
+                    await cls.set_file_value(index_filePath, file_name, res.text)
+                    print(f"成功更新 '{file_name}.json' 的<content>")
+
+async def run_main():
+    await tool.main()
+
+asyncio.run(run_main())

@@ -12,12 +12,12 @@ class tool():
     async def set_file_hash(cls, filePath:str, fileName:str, hashValue:int):
         if not filePath.exists():
             await cls.get_file_hash(filePath)
-        else:
-            with open(filePath, 'r', encoding='utf-8') as f:
-                data = json.load(f)
-                data.update({fileName:hashValue})
-                with open(filePath, 'w', encoding='utf-8') as f_new:
-                    json.dump(data, f_new, indent=4)
+            print(f'{filePath}创建完成')
+        with open(filePath, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            data.update({fileName:hashValue})
+            with open(filePath, 'w', encoding='utf-8') as f_new:
+                json.dump(data, f_new, indent=4)
 
     @classmethod
     async def get_file_hash(cls, filePath):
@@ -52,7 +52,7 @@ class tool():
             res = requests.get(f'https://raw.githubusercontent.com/Nwflower/star-rail-atlas/master/{file_name}.json')
             new_fileHash = hashlib.md5(res.content).hexdigest()
             index_filePath = cls.root_path / f"{file_name}.json"
-            hash_filePath = cls.root_path / 'file_hashVer.json'
+            hash_filePath = cls.root_path / 'filesHash.json'
             if not index_filePath.exists():
                 await cls.set_file_hash(hash_filePath, file_name, new_fileHash)
                 print(f"成功更新 '{file_name}.json' 的<hash>")

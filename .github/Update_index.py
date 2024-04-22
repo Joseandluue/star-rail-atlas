@@ -37,13 +37,13 @@ class tool():
 
     @classmethod
     async def set_file_value(cls, paths, fileName, contents):
+        fileData = json.loads(contents)
         if fileName == 'files' or 'path':
-            data = contents['guide for role']
+            data = fileData['guide for role']
         elif fileName == 'othername':
-            data = contents['role']
+            data = fileData['role']
         with open(paths, 'w', encoding='utf-8') as f:
-            fileData = json.loads(data)
-            json.dump(fileData, f, ensure_ascii=False, indent=4)
+            json.dump(data, f, ensure_ascii=False, indent=4)
 
     @classmethod
     async def main(cls):

@@ -25,4 +25,5 @@ for file_name in file:
                 new_fileData = json.loads(res.text)
                 json.dump(new_fileData, f, ensure_ascii=False, indent=4)
             print(f'已更新{file_name}')
+            break
         print(f'{file_name}已是最新版本')

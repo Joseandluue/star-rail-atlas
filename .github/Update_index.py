@@ -15,6 +15,7 @@ class tool():
             print(f'{filePath}创建完成')
         with open(filePath, 'r', encoding='utf-8') as f:
             data = json.load(f)
+            data.update({'version':data['version'] + 1})
             data.update({fileName:hashValue})
             with open(filePath, 'w', encoding='utf-8') as f_new:
                 json.dump(data, f_new, indent=4)
@@ -22,6 +23,7 @@ class tool():
     @classmethod
     async def get_file_hash(cls, filePath):
         hashVer = {
+            'version': 0,
             'files': '',
             'othername': '',
             'path':''
@@ -39,11 +41,13 @@ class tool():
     async def set_file_value(cls, paths, fileName, contents):
         fileData = json.loads(contents)
         if fileName == 'files' or 'path':
+            k = 'guide_overview'
             data = fileData['guide for role']
         elif fileName == 'othername':
+            k = 'characters'
             data = fileData['role']
         with open(paths, 'w', encoding='utf-8') as f:
-            json.dump(data, f, ensure_ascii=False, indent=4)
+            json.dump({k:data}, f, ensure_ascii=False, indent=4)
 
     @classmethod
     async def main(cls):

@@ -40,10 +40,10 @@ class tool():
     @classmethod
     async def set_file_value(cls, paths, fileName, contents):
         fileData = json.loads(contents)
-        if fileName == 'files' or 'path':
+        if fileName == 'files':
             k = 'guide_overview'
             data = fileData['guide for role']
-        elif fileName == 'othername':
+        elif fileName in {'othername', 'path'} :
             k = 'characters'
             data = fileData['role']
         with open(paths, 'w', encoding='utf-8') as f:

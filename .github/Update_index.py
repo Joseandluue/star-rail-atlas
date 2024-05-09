@@ -46,7 +46,7 @@ class tool():
             data = fileData['guide for role']
         elif fileName in {'othername', 'path'} :
             k = 'characters'
-            if fileName == 'othername'
+            if fileName == 'othername':
                 data = fileData
             else:
                 data = fileData['guide for role']

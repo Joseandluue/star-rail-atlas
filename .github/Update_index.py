@@ -57,6 +57,7 @@ class tool():
     async def main(cls):
         file = ['files','othername','path']
         for file_name in file:
+            print(f'正在检查{file_name}')
             if file_name == 'othername':
                 respon = requests.get(f'https://raw.githubusercontent.com/Nwflower/star-rail-atlas/master/{file_name}.json')
                 yaml_data = yaml.safe_load(res.text)

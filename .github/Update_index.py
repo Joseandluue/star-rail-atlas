@@ -1,6 +1,7 @@
 import hashlib
 import requests
 import json
+import yaml
 from pathlib import Path
 import asyncio
 
@@ -45,7 +46,10 @@ class tool():
             data = fileData['guide for role']
         elif fileName in {'othername', 'path'} :
             k = 'characters'
-            data = fileData['guide for role']
+            if fileName == 'othername'
+                data = fileData
+            else:
+                data = fileData['guide for role']
         with open(paths, 'w', encoding='utf-8') as f:
             json.dump({k:data}, f, ensure_ascii=False, indent=4)
 
@@ -53,14 +57,20 @@ class tool():
     async def main(cls):
         file = ['files','othername','path']
         for file_name in file:
-            res = requests.get(f'https://raw.githubusercontent.com/Nwflower/star-rail-atlas/master/{file_name}.json')
-            new_fileHash = hashlib.md5(res.content).hexdigest()
+            if file_name == 'othername':
+                respon = requests.get(f'https://raw.githubusercontent.com/Nwflower/star-rail-atlas/master/{file_name}.json')
+                yaml_data = yaml.safe_load(res.text)
+                data = json.dumps(yaml_data, ensure_ascii=False)
+            else:
+                res = requests.get(f'https://raw.githubusercontent.com/Nwflower/star-rail-atlas/master/{file_name}.json')
+                data = res.content
+            new_fileHash = hashlib.md5(data).hexdigest()
             index_filePath = cls.root_path / f"{file_name}.json"
             hash_filePath = cls.root_path / 'filesHash.json'
             if not index_filePath.exists():
                 await cls.set_file_hash(hash_filePath, file_name, new_fileHash)
                 print(f"成功更新 '{file_name}.json' 的<hash>")
-                await cls.set_file_value(index_filePath, file_name, res.text)
+                await cls.set_file_value(index_filePath, file_name, data)
                 print(f"创建 '{file_name}.json' 完成")
             else:
                 old_hashdata = await cls.get_file_hash(hash_filePath)
@@ -68,7 +78,7 @@ class tool():
                     print(f"正在更新 '{file_name}.json'")
                     await cls.set_file_hash(hash_filePath, file_name, new_fileHash)
                     print(f"成功更新 '{file_name}.json' 的<hash>")
-                    await cls.set_file_value(index_filePath, file_name, res.text)
+                    await cls.set_file_value(index_filePath, file_name, data)
                     print(f"成功更新 '{file_name}.json' 的<content>")
 
 async def run_main():

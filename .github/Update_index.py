@@ -59,9 +59,9 @@ class tool():
         for file_name in file:
             print(f'正在检查{file_name}')
             if file_name == 'othername':
-                respon = requests.get(f'https://raw.githubusercontent.com/Nwflower/star-rail-atlas/master/{file_name}.json')
-                yaml_data = yaml.safe_load(res.text)
-                data = json.dumps(yaml_data, ensure_ascii=False)
+                respon = requests.get('https://raw.githubusercontent.com/Nwflower/star-rail-atlas/master/othername/guide%20for%20role.yaml')
+                yaml_data = yaml.safe_load(respon.text)
+                data = json.dumps(yaml_data, ensure_ascii=False).encode()
             else:
                 res = requests.get(f'https://raw.githubusercontent.com/Nwflower/star-rail-atlas/master/{file_name}.json')
                 data = res.content

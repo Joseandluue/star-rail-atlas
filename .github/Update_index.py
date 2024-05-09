@@ -45,7 +45,7 @@ class tool():
             data = fileData['guide for role']
         elif fileName in {'othername', 'path'} :
             k = 'characters'
-            data = fileData['role']
+            data = fileData['guide for role']
         with open(paths, 'w', encoding='utf-8') as f:
             json.dump({k:data}, f, ensure_ascii=False, indent=4)
 

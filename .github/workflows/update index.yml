@@ -22,7 +22,8 @@ jobs:
       - name: Run python script
         run: |
           cd .github
-          python -m pip install requests asyncio
+          python -m pip install --upgrade pip
+          python -m pip install requests asyncio pyyaml
           python Update_index.py
           
       - name: Commit changes
